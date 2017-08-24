@@ -392,11 +392,12 @@ Utils.myprint()
 def testProcess(obj):
     print 'process test:%s' % obj
 
-childp = ProcessUtil.creatProcess(testProcess,(hsn,))
-childp.start()
-print 'pname:%s,pid:%s,pisrun:%s' % (childp.name,childp.pid,childp.is_alive())
-
-
+# 在windows中，子进程需要放在if __name__ == "__main__"下面执行，否则会报错。linux下不需要。
+if __name__ == '__main__':
+    childp = ProcessUtil.creatProcess(testProcess, (hsn,))
+    childp.start()
+    childp.join()   # 在windows下，必须加上join()指令，否则下面的打印不会打印出来，join的意思是将子进程跟主进程绑定在一起
+    print "pname:%s,pid:%s,pisrun:%s，mainpid:%s" % (childp.name, childp.pid, childp.is_alive(),os.getpid())
 
 
 

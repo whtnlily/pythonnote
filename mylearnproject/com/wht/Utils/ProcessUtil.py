@@ -19,19 +19,3 @@ def creatProcess(fun,args):
     thread_p = Process(target=fun,args=args)
 
     return thread_p
-
-def getMainProcessId():
-    """
-    获取主线程的进程id
-    :return: 进程id
-    """
-    return os.getppid()
-
-
-def getChildProcessId(process):
-
-    """
-    获取子进程的id
-    :return: 返回进程的进程id
-    """
-    return process.pid
