@@ -43,7 +43,7 @@ def writeFile(path, content, isdelspace=False):
         newPath = '%s%s' % (path,'.new')
         shutil.copy(path, newPath)
         # 2、重写文件
-        with open(newPath, 'w') as f:
+        with open(newPath, 'w') as f:   # 'w'表示覆盖写
             linelist = readFile(path, isdelspace)
             for line in linelist:
                 f.write('%s\n' % line.encode("utf-8"))
@@ -51,10 +51,8 @@ def writeFile(path, content, isdelspace=False):
         # 3、覆盖旧文件
         shutil.move(newPath, path)
     else:
-        with open(path,'a') as f:
+        with open(path,'a') as f:   # 'a'表示追加写
             f.write('\n%s' % content)
-
-
 
 
 

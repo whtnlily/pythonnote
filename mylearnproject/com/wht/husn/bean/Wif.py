@@ -42,6 +42,27 @@ class Wif(object):
 
     __repr__ = __str__
 
+    """
+    将对象格式化为dict，便于序列化
+    """
+    def wif2dict(self):
+        return {
+            'name':self.name,
+            'score':self.score,
+            'tengw':self.tengw,
+            'ydlevel':self.__level
+        }
+
+    """
+    反序列化，将一个dict字符串反序列化为类对象
+    """
+    @staticmethod   # 表示该函数是static类型的，所以参数里面没有self
+    def dict2wif(d):
+        wif = Wif(d['name'],d['score'])
+        wif.setYD(d['ydlevel'])
+        wif.tengw = d['tengw']
+        return wif
+
 
 
 

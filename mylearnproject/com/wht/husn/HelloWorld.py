@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 'learn note'
+import json
+import os
+
 __author__ = 'hyman.wan'
 # 学习笔记
 from com.wht.Utils import Utils
@@ -11,7 +14,11 @@ import functools
 from com.wht.husn.bean import Wif
 from com.wht.husn.bean import Student
 from types import MethodType
-import sys
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+
 
 print ord('A')
 
@@ -324,32 +331,61 @@ Utils.myprint()
 # python中是允许多继承的
 # python中调试代码：print,assert,logging,pdb,pdb.set_trace(),IDE(pycharm)
 
-#文件读写
-lovlist = Utils.readFile('E:\\workspace\\pythonproject\\temp\\mynote.txt',True)
+# 文件读写
+# lovlist = Utils.readFile('E:\\workspace\\pythonproject\\pythonnote\\temp\\mynote.txt',True)
+filepath = os.path.abspath('.')     # 获取当前目录的路径 .表示当前目录 ..表示上级目录
+print filepath
+path = os.path.abspath('..\\Utils\\mynote.txt')
+print path
+lovlist = Utils.readFile(path,True)
 for i,lov in enumerate(lovlist):
     print 'lov %s : %s' % (i,lov)
 Utils.myprint()
 
 addstr = '我是Hyman.wan。'
-Utils.writeFile('E:\\workspace\\pythonproject\\temp\\mynote.txt',addstr,True)
-lovlist = Utils.readFile('E:\\workspace\\pythonproject\\temp\\mynote.txt')
-
+# Utils.writeFile('E:\\workspace\\pythonproject\\pythonnote\\temp\\mynote.txt',addstr,True)
+# lovlist = Utils.readFile('E:\\workspace\\pythonproject\\pythonnote\\temp\\mynote.txt')
+Utils.writeFile(path,addstr,True)
+lovlist = Utils.readFile(path)
 for i,lov in enumerate(lovlist):
     print 'lov %s : %s' % (i,lov)
+Utils.myprint()
+# 序列化，便于传输和保存 序列化pickling 反序列化unpickling
+# cPickle pickle
+strpickle = pickle.dumps(mylovewifs)    # 将一个对象序列化为一个str
+print 'pickle test : %s' % strpickle
+# 将序列化对象存入文件
+with open('dump.txt','wb') as picklef:
+    pickle.dump(mylovewifs,picklef)
+Utils.myprint()
+# 反序列化，从文件中读取序列化对象
+with open('dump.txt','rb') as unpicklef:
+    unpicklestr = pickle.load(unpicklef)
+    print 'unpickle test:%s' % unpicklestr
+Utils.myprint()
 
+# json
+dictjsonstr = json.dumps(mylovewifs)  # 将一个dict转换为json
+print 'dict->json:%s' % dictjsonstr
 
+dict_str = json.loads(dictjsonstr)  # 将一个Json字符串转换成python对象
+print 'json->dict str : %s' % dict_str
+Utils.myprint()
 
+# 将类对象序列化
+hsn = Wif.Wif('husn',99)
+hsn.setYD('jing')
+hsn.tengw = 110
 
+hsnjson = json.dumps(hsn,default=Wif.Wif.wif2dict)
+print 'class->json:%s' % hsnjson
+# 使用__dict__属性
+print 'class->json __dict__:%s' % json.dumps(hsn,default=lambda obj: obj.__dict__)
+# 反序列化为类对象,object_hook后面的函数必须是static类型的
+print 'jsondictstr->class:%s' % json.loads(hsnjson,object_hook=Wif.Wif.dict2wif)
+Utils.myprint()
 
-
-
-
-
-
-
-
-
-
+# 多线程
 
 
 
