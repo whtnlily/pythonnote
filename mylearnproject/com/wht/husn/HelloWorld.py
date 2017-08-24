@@ -8,12 +8,14 @@ import os
 __author__ = 'hyman.wan'
 # 学习笔记
 from com.wht.Utils import Utils
+from com.wht.Utils import ProcessUtil
 from collections import Iterable
-import math
-import functools
 from com.wht.husn.bean import Wif
 from com.wht.husn.bean import Student
 from types import MethodType
+import math
+import signal
+import functools
 try:
     import cPickle as pickle
 except ImportError:
@@ -203,10 +205,10 @@ def is_odd(od):
 print 'filter test1:',filter(is_odd,[1,2,4,8,9,10])     #删除掉偶数
 
 def not_empty(s):
-    '''
+    """
     python中的and，从左到右运算，当and左边都为真时，
     才会计算and右边的表达式，并返回右边的表达式
-    '''
+    """
     return s and s.strip()      # 这里的and的意思是，s存在的情况下，才会计算右边的s.strip()
 print 'filter test2:',filter(not_empty,['A','','c','b','','D'])     #去掉空字符串
 Utils.myprint()
@@ -335,7 +337,7 @@ Utils.myprint()
 # lovlist = Utils.readFile('E:\\workspace\\pythonproject\\pythonnote\\temp\\mynote.txt',True)
 filepath = os.path.abspath('.')     # 获取当前目录的路径 .表示当前目录 ..表示上级目录
 print filepath
-path = os.path.abspath('..\\Utils\\mynote.txt')
+path = os.path.abspath('..//Utils//mynote.txt') # 如果在windows系统中，这里的斜杠//要换成\\
 print path
 lovlist = Utils.readFile(path,True)
 for i,lov in enumerate(lovlist):
@@ -385,8 +387,14 @@ print 'class->json __dict__:%s' % json.dumps(hsn,default=lambda obj: obj.__dict_
 print 'jsondictstr->class:%s' % json.loads(hsnjson,object_hook=Wif.Wif.dict2wif)
 Utils.myprint()
 
-# 多线程
+# 多进程
 
+def testProcess(obj):
+    print 'process test:%s' % obj
+
+childp = ProcessUtil.creatProcess(testProcess,(hsn,))
+childp.start()
+print 'pname:%s,pid:%s,pisrun:%s' % (childp.name,childp.pid,childp.is_alive())
 
 
 
