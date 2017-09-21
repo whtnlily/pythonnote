@@ -4,6 +4,7 @@
 'learn note'
 import json
 import os
+import commands
 
 __author__ = 'hyman.wan'
 # 学习笔记
@@ -13,9 +14,12 @@ from collections import Iterable
 from com.wht.husn.bean import Wif
 from com.wht.husn.bean import Student
 from types import MethodType
+from multiprocessing import Pool
 import math
-import signal
+import time
+import random
 import functools
+import threading
 try:
     import cPickle as pickle
 except ImportError:
@@ -337,7 +341,7 @@ Utils.myprint()
 # lovlist = Utils.readFile('E:\\workspace\\pythonproject\\pythonnote\\temp\\mynote.txt',True)
 filepath = os.path.abspath('.')     # 获取当前目录的路径 .表示当前目录 ..表示上级目录
 print filepath
-path = os.path.abspath('..//Utils//mynote.txt') # 如果在windows系统中，这里的斜杠//要换成\\
+path = os.path.abspath('..\\Utils\\mynote.txt') # 如果在windows系统中，这里的斜杠//要换成\\
 print path
 lovlist = Utils.readFile(path,True)
 for i,lov in enumerate(lovlist):
@@ -392,20 +396,85 @@ Utils.myprint()
 def testProcess(obj):
     print 'process test:%s' % obj
 
+def long_time_task(name):
+    print 'Run task %s (%s)...' % (name, os.getpid())
+    start = time.time()
+    time.sleep(random.random() * 3)
+    end = time.time()
+    print 'Task %s runs %0.2f seconds.' % (name, (end - start))
+
 # 在windows中，子进程需要放在if __name__ == "__main__"下面执行，否则会报错。linux下不需要。
-if __name__ == '__main__':
-    childp = ProcessUtil.creatProcess(testProcess, (hsn,))
-    childp.start()
-    childp.join()   # 在windows下，必须加上join()指令，否则下面的打印不会打印出来，join的意思是将子进程跟主进程绑定在一起
-    print "pname:%s,pid:%s,pisrun:%s，mainpid:%s" % (childp.name, childp.pid, childp.is_alive(),os.getpid())
+# if __name__ == '__main__':
+    # childp = ProcessUtil.creatProcess(testProcess, (hsn,))
+    # childp.start()
+    # childp.join()   # 在windows下，必须加上join()指令，否则下面的打印不会打印出来，join的意思是将子进程跟主进程绑定在一起
+    # print "pname:%s,pid:%s,pisrun:%s，mainpid:%s" % (childp.name, childp.pid, childp.is_alive(),os.getpid())
+    # Utils.myprint()
 
+    # print 'Parent process %s.' % os.getpid()
+    # pool = Pool()   # 创建一个进程池
+    # for i in range(5):
+    #     pool.apply_async(long_time_task,args=(i,))
+    # print 'Waitting for all subprocesses done...'
+    # pool.close()
+    # pool.join()   # 阻塞当前进程
+    # print 'All subprocesses done...'
 
+# 多线程
+def loop():
+    print('thread %s is running...' % threading.current_thread().name)
+    n = 0
+    while n < 5:
+        n = n + 1
+        print('thread %s >>> %s' % (threading.current_thread().name,n))
+        time.sleep(1)
+    print('thread %s ended.' % threading.current_thread().name)
 
+print('thread %s is running...' % threading.current_thread().name)  #主线程
+t = threading.Thread(target=loop, name='LoopThread')    #子线程
+t.start()
+t.join()    # 阻塞主线程
+print 'thread %s ended.' % threading.current_thread().name
 
+Utils.myprint()
 
+# 线程安全，线程锁
+balance = 0     #模拟银行存款
+lock = threading.Lock()     #线程锁
 
+def change_it(n):
+    # 先存后取，结果应该为0:
+    global balance
+    balance = balance + n
+    balance = balance - n
 
+def run_thread(n):
+    for ii in range(100000):
+        # 先获取锁
+        lock.acquire()
+        try:
+            change_it(n)
+        finally:
+            # 释放锁
+            lock.release()
+            # print 'lock release'
 
+balanceT = threading.Thread(target=run_thread,args=(5,),name='BalanceThread')
+balanceT2 = threading.Thread(target=run_thread,args=(8,),name='BalanceThread1')
+balanceT.start()
+balanceT2.start()
+balanceT.join()
+balanceT2.join()
+print 'sync thread balance:%s' % balance
+Utils.myprint()
+
+cmd1 = "d:\\temp\\tvui\\"
+cmd2 = "git clone https://gitlab.spetechcular.com/sdk/tvui.git"
+path = "D:\\temp\\tvui\\tvui\\app\\tvui\\tvui-music\\src\\androidTest\\java\\com\\aispeech\\tvui\\music\\ApplicationTest.java"
+# os.chdir(cmd1)   # 切换到指定目录
+# os.system(cmd2)
+
+Utils.replace(path,"super(Application.class)","super(Hsnily.class)")
 
 
 

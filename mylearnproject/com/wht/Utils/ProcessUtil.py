@@ -6,6 +6,7 @@
 """
 import os
 from multiprocessing import Process
+from multiprocessing import Pool
 
 
 def creatProcess(fun,args):

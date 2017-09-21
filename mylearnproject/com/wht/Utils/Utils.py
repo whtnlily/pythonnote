@@ -54,7 +54,24 @@ def writeFile(path, content, isdelspace=False):
         with open(path,'a') as f:   # 'a'表示追加写
             f.write('\n%s' % content)
 
-
+"""
+替换文件中的指定的字符串
+file_path : 文件路径
+old_str ：需要替换的字符串
+new_str ：新字符串
+"""
+def replace(file_path, old_str, new_str):
+  try:
+    f = open(file_path,'r+')
+    all_lines = f.readlines()
+    f.seek(0)
+    f.truncate()
+    for line in all_lines:
+      line = line.replace(old_str, new_str)
+      f.write(line)
+    f.close()
+  except Exception,e:
+    print e
 
 
 
