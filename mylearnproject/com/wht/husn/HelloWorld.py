@@ -80,6 +80,7 @@ mylovewifs = {'husn': 98, 'gongyl': 90, 'liut': 86, 'zhouyp': 80, 'sunjj': 70, '
               'huyy': 90}
 for k, v in mylovewifs.items():
     print 'name:%s,level:%d' % (k, v)
+
 print 'my loveset leve:', mylovewifs['husn']
 Utils.myprint()
 for key in mylovewifs:
@@ -468,16 +469,55 @@ balanceT2.join()
 print 'sync thread balance:%s' % balance
 Utils.myprint()
 
-cmd1 = "d:\\temp\\tvui\\"
+cmd1 = "d:\\temp\\tep\\"
 cmd2 = "git clone https://gitlab.spetechcular.com/sdk/tvui.git"
-path = "D:\\temp\\tvui\\tvui\\app\\tvui\\tvui-music\\src\\androidTest\\java\\com\\aispeech\\tvui\\music\\ApplicationTest.java"
-# os.chdir(cmd1)   # 切换到指定目录
-# os.system(cmd2)
+path = "D:\\temp\\tep\\tvui\\app\\tvui\\tvui-music\\src\\androidTest\\java\\com\\aispeech\\tvui\\music\\ApplicationTest.java"
+cmd3 = "D:\\temp\\tep\\tvui\\"
+cmd4 = "git rev-parse HEAD"
+cmd5 = "git rev-parse origin"
+os.chdir(cmd1)   # 切换到指定目录
+out = os.system(cmd2)
 
-Utils.replace(path,"super(Application.class)","super(Hsnily.class)")
+print 'out:%s' % out
+if out == 0:
+    print 'clone ok'
+    os.chdir(cmd3)
+    output = Utils.execCmd(cmd4) #os.system(cmd4)
+    output1 = Utils.execCmd(cmd5) #os.system(cmd5)
+    print 'output:%s' % output
+    print 'output1:%s' % output1
 
+Utils.replace(path,"super(Application.class)","super(HsnilyHyyily.class)")
 
+# linenum = Utils.findContentIndex(path,"swith (event) {")
+# print 'lines num:%s' % linenum
 
+event1 = '"mediacontrol.media.play"'
+evvent2 = '"mediacontrol.media.fastforward"'
+eventlist = [event1,evvent2]
+i = 0
+constr = '''
+           case %s :
+                //TODO
+                break;\n
+        '''
+content1 = '\n'
+while i < 2:
+    event = eventlist[i]
+    content1 = constr % event
+    Utils.submitcontent(path,10,content1)
+    i += 1
+# content = '''           case %s :
+#                 //TODO
+#                 break;
+#             case %s :
+#                 //TODO
+#                 break;
+#             default:
+#                 break;''' % (event1,evvent2)
+# Utils.submitcontent(path,linenum+2,content)
+
+Utils.copyfile(path,"D:\\temp\\tvui\\tvui\\app\\tvui\\tvui-music\\src\\androidTest\\java\\com\\aispeech\\tvui\\%s.java" % "_2017850155455")
 
 
 
