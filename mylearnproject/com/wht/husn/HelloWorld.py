@@ -49,7 +49,7 @@ Utils.myprint()
 tup = ('husn', 'sunjj', 'gongyl')
 for tem in tup:
     print 'i love ' + tem
-
+print 'tup0:%s' % tup[0]
 Utils.myprint()
 formatstr = '%02d-%02d' % (3, 1)
 print('formatstr:' + formatstr)
@@ -86,14 +86,15 @@ Utils.myprint()
 for key in mylovewifs:
     print 'my love name:', key
 Utils.myprint()
-for value in mylovewifs:
-    print 'my love level:', mylovewifs.get(value)
+for key in mylovewifs:
+    print 'my love level:', mylovewifs.get(key)
 Utils.myprint()
 
 # set : 无序，元素不能重复的列表，用()表示，必须用一个list作为输入集合。与List的区别就是，list是有序的，元素可重复的
 settest = set(mywifis)
 for w in settest:
     print 'my wf ', w
+
 Utils.myprint()
 
 
